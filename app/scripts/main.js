@@ -14,7 +14,6 @@ M.AutoInit();
   const $createWesiteForm = document.querySelector("#create-website-form");
   const $websitesGrid = document.querySelector("#websites-grid");
   const $urlWebsite = document.querySelector("#url-website");
-  const $titleWebsite = document.querySelector("#title-website");
   const $submitWebsiteBtn = document.querySelector("#submit-website-btn");
 
   let isSendingWebsite = false;
@@ -25,20 +24,20 @@ M.AutoInit();
   ////
 
   // Card para pintar
-  const getCard = ({ title, url }) => `<div class="col s12 m6 l4">
+  const getCard = ({ title, url, description }) => `<div class="col s12 m6 l4">
   <div class="card">
-    <div class="card-content">
-      <span class="card-title">${title}</span>
+      <div class="card-content">
+        <span class="card-title">${title}</span>
+        <p>${description}</p>
+      </div>
+      <div class="card-action">
+        <a href="${url}" class="blue-text" target="blank">Visitar website</a>
+      </div>
     </div>
-    <div class="card-action">
-      <a href="${url}" class="blue-text" target="blank">Visitar website</a>
-    </div>
-  </div>
-</div>`;
+  </div>`;
 
   function clearCreationArea() {
     $urlWebsite.value = "";
-    $titleWebsite.value = "";
 
     isSendingWebsite = false;
 
@@ -101,10 +100,6 @@ M.AutoInit();
       return;
     }
 
-    if ($titleWebsite.value.trim() === "") {
-      return;
-    }
-
     // Marco el estado como enviando
     isSendingWebsite = true;
 
@@ -121,7 +116,7 @@ M.AutoInit();
         "Content-Type": "application/json"
       },
       mode: "cors",
-      body: JSON.stringify({ url: $urlWebsite.value, title: $titleWebsite.value })
+      body: JSON.stringify({ url: $urlWebsite.value })
     };
 
     // Envío + catch
