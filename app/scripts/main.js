@@ -24,10 +24,13 @@ M.AutoInit();
   ////
 
   // Card para pintar
-  const getCard = ({ title, url, description }) => `<div class="col s12 m6 l4">
+  const getCard = ({ title, url, description, image }) => `<div class="col s12 m6 l4">
   <div class="card">
+      <div class="card-image">
+        <img src="${SERVER_URL}/${image}">
+        </div>
       <div class="card-content">
-        <span class="card-title">${title}</span>
+        <span class="card-title black-text">${title}</span>
         <p>${description}</p>
       </div>
       <div class="card-action">
