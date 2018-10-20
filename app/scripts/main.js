@@ -14,6 +14,7 @@ M.AutoInit();
   const $createWesiteForm = document.querySelector("#create-website-form");
   const $websitesGrid = document.querySelector("#websites-grid");
   const $urlWebsite = document.querySelector("#url-website");
+  const $titleWebsite = document.querySelector("#title-website");
   const $submitWebsiteBtn = document.querySelector("#submit-website-btn");
 
   let isSendingWebsite = false;
@@ -37,6 +38,7 @@ M.AutoInit();
 
   function clearCreationArea() {
     $urlWebsite.value = "";
+    $titleWebsite.value = "";
 
     isSendingWebsite = false;
 
@@ -60,9 +62,16 @@ M.AutoInit();
     clearCreationArea();
 
     M.toast({
-      html: "Algo ha ido mal en tu envío",
+      html: "Algo ha ido mal en tu petición",
       classes: "red-text text-lighten-3"
     });
+  }
+
+  async function getInitialCards() {
+    const req = await fetch(`${SERVER_URL}/website/list`).catch(err => websiteCreationFail());
+    const data = await req.json();
+
+    data.list && data.list.forEach(item => $websitesGrid.innerHTML += getCard(item));
   }
 
 
@@ -92,6 +101,10 @@ M.AutoInit();
       return;
     }
 
+    if ($titleWebsite.value.trim() === "") {
+      return;
+    }
+
     // Marco el estado como enviando
     isSendingWebsite = true;
 
@@ -108,8 +121,9 @@ M.AutoInit();
         "Content-Type": "application/json"
       },
       mode: "cors",
-      body: JSON.stringify({ url: $urlWebsite.value })
+      body: JSON.stringify({ url: $urlWebsite.value, title: $titleWebsite.value })
     };
+
     // Envío + catch
     const req = await fetch(`${SERVER_URL}/website/create`, reqOptions).catch(err => websiteCreationFail());
 
@@ -124,4 +138,11 @@ M.AutoInit();
     // Generamos la card con los datos recibidos
     websiteCreationSuccess(resp);
   });
+
+
+  ///////////////////////////////////
+  //// Scripts de inicio
+  ////
+
+  getInitialCards();
 })();
