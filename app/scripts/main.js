@@ -6,19 +6,7 @@ M.AutoInit();
   // Expresión regular que comprueba una URL válida
   const urlRegExp = new RegExp(/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/gm);
 
-  // Card para pintar
-  const card = `<div class="col s12 m6 l4">
-  <div class="card">
-    <div class="card-content">
-      <span class="card-title">Card Title</span>
-      <p>I am a very simple card. I am good at containing small bits of information. I am convenient because I require
-        little markup to use effectively.</p>
-    </div>
-    <div class="card-action">
-      <a href="#" class="blue-text">This is a link</a>
-    </div>
-  </div>
-</div>`;
+  const SERVER_URL = "http://localhost:3001";
 
   const $actionBtn = document.querySelector("#action-btn");
   const $creationArea = document.querySelector("#creation-area");
@@ -35,6 +23,18 @@ M.AutoInit();
   //// Helper functions
   ////
 
+  // Card para pintar
+  const getCard = ({ title, url }) => `<div class="col s12 m6 l4">
+  <div class="card">
+    <div class="card-content">
+      <span class="card-title">${title}</span>
+    </div>
+    <div class="card-action">
+      <a href="${url}" class="blue-text" target="blank">Visitar website</a>
+    </div>
+  </div>
+</div>`;
+
   function clearCreationArea() {
     $urlWebsite.value = "";
 
@@ -48,11 +48,11 @@ M.AutoInit();
     $creationArea.classList.remove("open");
   }
 
-  function websiteCreationSuccess() {
+  function websiteCreationSuccess(data) {
     // Limpiamos y cerramos el área de creación
     clearCreationArea();
 
-    $websitesGrid.innerHTML += card;
+    $websitesGrid.innerHTML += getCard(data);
   }
 
   function websiteCreationFail() {
@@ -84,7 +84,7 @@ M.AutoInit();
   });
 
   // Control del submit del formulario de creación
-  $createWesiteForm.addEventListener("submit", e => {
+  $createWesiteForm.addEventListener("submit", async e => {
     e.preventDefault();
 
     // 1. Validar el texto como url válida
@@ -92,13 +92,36 @@ M.AutoInit();
       return;
     }
 
+    // Marco el estado como enviando
     isSendingWebsite = true;
 
+    // Establezco estado para componentes en estado de envío
     $closeCreationArea.classList.add("loading");
     $submitWebsiteBtn.classList.add("disabled");
     $urlWebsite.classList.remove("validate");
     $urlWebsite.setAttribute("disabled", "disabled");
 
-    return;
+    // Preparo cabeceras y petición de envío
+    const reqOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      mode: "cors",
+      body: JSON.stringify({ url: $urlWebsite.value })
+    };
+    // Envío + catch
+    const req = await fetch(`${SERVER_URL}/website/create`, reqOptions).catch(err => websiteCreationFail());
+
+    // Si la respuesta no es creación, genera error
+    if (req.status.toString() !== "201") {
+      return websiteCreationFail();
+    }
+
+    // En caso de que todo vaya OK, sacamos el obj de respuesta
+    const resp = await req.json();
+
+    // Generamos la card con los datos recibidos
+    websiteCreationSuccess(resp);
   });
 })();
