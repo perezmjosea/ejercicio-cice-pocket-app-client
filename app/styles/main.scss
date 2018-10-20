@@ -37,6 +37,10 @@ body {
       cursor: pointer;
       padding: 2rem;
 
+      &.loading {
+        opacity: 0.3;
+      }
+
       &:active {
         opacity: 0.4;
       }
@@ -53,7 +57,7 @@ body {
       max-width: 80%;
       margin: 3rem auto 0;
 
-      #submit-website {
+      #submit-website-btn {
         margin-top: 2rem;
       }
     }
