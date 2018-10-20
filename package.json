@@ -1,5 +1,8 @@
 {
   "private": true,
+  "scripts": {
+    "start": "gulp serve"
+  },
   "engines": {
     "node": ">=4"
   },
