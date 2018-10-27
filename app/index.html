@@ -31,8 +31,11 @@
         <a href="#" class="brand-logo">CICE Pocket</a>
         <ul id="nav-mobile" class="right">
           <li>
-            <a href="#">Filtro</a>
+            <a href="#" data-id="">All</a>
           </li>
+          <!-- <li>
+            <a href="#">Filtro</a>
+          </li> -->
       </div>
     </nav>
   </header>
@@ -62,9 +65,26 @@
             <label for="url-website">Url website</label>
             <span class="helper-text" data-error="La url no es válida" data-success=""></span>
           </div>
-          <button id="submit-website-btn" class="btn waves-effect waves-light right" type="submit" name="action">Añadir
-            <i class="material-icons right">send</i>
-          </button>
+
+          <div class="input-field" id="categories-field">
+            <i class="material-icons prefix">label_outline</i>
+            <!-- <select id="categories-list">
+              <option value="" disabled selected>Choose website category</option>
+            </select>
+            <label>Categories</label> -->
+          </div>
+
+          <!-- <div class="input-field">
+            <i class="material-icons prefix">label_outline</i>
+            <input placeholder="Category" id="category-website" type="text" class="validate">
+            <label for="url-website">Category</label>
+            <span class="helper-text" data-error="Campo obligatorio" data-success=""></span>
+          </div> -->
+          <div class="input-field">
+            <button id="submit-website-btn" class="btn waves-effect waves-light right" type="submit" name="action">Añadir
+              <i class="material-icons right">send</i>
+            </button>
+          </div>
         </form>
       </section>
     </div>
